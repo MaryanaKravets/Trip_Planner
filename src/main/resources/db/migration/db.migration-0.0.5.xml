@@ -1,0 +1,36 @@
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+<changeSet id="5" author="Maryanna">
+    <validCheckSum>8:7bef79fb4fd97fc6909428d82d75b787</validCheckSum>
+    <createTable tableName="trips">
+        <column name="id" type="bigint" autoIncrement="true">
+            <constraints primaryKey="true" nullable="false" unique="true"/>
+        </column>
+        <column name="departure_day" type="date">
+            <constraints nullable="false"/>
+        </column>
+        <column name="day_of_arrival" type="date">
+            <constraints nullable="false"/>
+        </column>
+
+        <column name="mode_of_transport" type="varchar(50)">
+            <constraints nullable="false"/>
+        </column>
+
+        <column name="price_of_trip" type="decimal">
+            <!--                <constraints nullable="false"/>-->
+        </column>
+
+        <column name="place_id" type="bigint">
+            <constraints nullable="false" foreignKeyName="fk_trip_place" references="places(id)"/>
+        </column>
+
+    </createTable>
+</changeSet>
+
+</databaseChangeLog>
