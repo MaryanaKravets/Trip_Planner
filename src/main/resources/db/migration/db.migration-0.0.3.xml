@@ -7,7 +7,6 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="3" author="Maryanna">
-        <validCheckSum>8:801bc83487c3040a40b1af64b8d627f7</validCheckSum>
         <createTable tableName="comments">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
@@ -15,13 +14,9 @@
             <column name="text_of_comment" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="bigint">
-                <constraints nullable="false" foreignKeyName="fk_user_comment" references="users(id)"/>
-            </column>
+            <column name="user_id" type="bigint"/>
 
-            <column name="place_id" type="bigint">
-                <constraints nullable="false" foreignKeyName="fk_place_comment" references="places(id)"/>
-            </column>
+            <column name="place_id" type="bigint"/>             
 
             <column name="time_of_comment" type="date" defaultValueComputed="now()">
                 <constraints nullable="false"/>

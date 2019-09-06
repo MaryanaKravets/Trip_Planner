@@ -11,8 +11,8 @@ import java.util.Optional;
 public class PlaceService implements IPlaceService {
     private PlaceRepository placeRepository;
 
-    public PlaceService(PlaceRepository placeRepository){
-        this.placeRepository=placeRepository;
+    public PlaceService(PlaceRepository placeRepository) {
+        this.placeRepository = placeRepository;
     }
 
     @Override

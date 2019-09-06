@@ -1,10 +1,7 @@
 package edu.project2.tripplanner.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -14,7 +11,7 @@ import java.util.*;
 @Entity
 @Data
 @Table(name = "users")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements Serializable {
 
     @Id
@@ -33,11 +30,13 @@ public class User implements Serializable {
     private String password;
 
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST})
-    List<Trip> tripList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    List<Trip> tripList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST})
-    List<Comment> commentList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    List<Comment> commentList = new ArrayList<>();
 
 
     public User(String username, @Email String email, String password) {
@@ -48,5 +47,4 @@ public class User implements Serializable {
 
     public User() {
     }
-
 }

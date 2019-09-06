@@ -1,4 +1,5 @@
 package edu.project2.tripplanner.service;
+
 import edu.project2.tripplanner.model.User;
 import edu.project2.tripplanner.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -6,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {

@@ -23,27 +23,41 @@ public class TripService implements ITripService {
 
     private TripRepository tripRepository;
     private PlaceRepository placeRepository;
-    private CommentRepository commentRepository;
     private UserRepository userRepository;
 
 
     @Override
     public void deleteTripById(Long id) {
-     tripRepository.deleteTripById(id);
+        tripRepository.deleteTripById(id);
     }
 
     @Override
-    public ResponseEntity<Place> deletePlaceFromTrip(Long userId, Long tripId, Long placeId) {
-        tripRepository.findTripByIdAndUserId(userId,tripId).map(t->t.getPlaceSet().remove(placeRepository.findById(placeId).get()))
+    public Trip deletePlaceFromTrip(Long userId, Long tripId, Long placeId) {
+        Place place = placeRepository.findById(placeId).get();
+        return tripRepository.findTripByIdAndUserId(userId, tripId)
+                .map(t -> {
+                    t.removePlace(place);
+                    placeRepository.save(place);
+                    return tripRepository.save(t);
+                })
                 .orElseThrow(NotFoundExceptions::new);
+    }
+
+    @Override
+    public ResponseEntity<Trip> addTrip(Long userId, Trip trip) {
+        userRepository.findById(userId).map(u -> {
+            trip.setDepartureDay(trip.getDepartureDay());
+            trip.setDayOfArrival(trip.getDayOfArrival());
+            Random random = new Random();
+            int i = random.nextInt(Transport.values().length);
+            trip.setTransports(Transport.values()[i]);
+            trip.setPrice((random.nextInt(1000)) + 100);
+            u.getTripList().add(trip);
+            trip.setUser(u);
+            return tripRepository.save(trip);
+        });
         return ResponseEntity.status(HttpStatus.OK)
                 .build();
-    }
-
-    @Override
-    public void addTrip(Trip trip) {
-    tripRepository.save(trip);
-//        tripRepository.addTrip(trip.getDepartureDay(),trip.getDayOfArrival(),trip.getTransport());
     }
 
     @Override
@@ -51,16 +65,15 @@ public class TripService implements ITripService {
         if (!userRepository.existsById(userId) | !tripRepository.existsById(tripId)) {
             throw new NotFoundExceptions();
         }
-        return tripRepository.findTripByIdAndUserId(userId,tripId).map(t ->{
+        return tripRepository.findTripByIdAndUserId(userId, tripId).map(t -> {
             t.setDepartureDay(trip.getDepartureDay());
             t.setDayOfArrival(trip.getDayOfArrival());
-            Random random=new Random();
-            int i=random.nextInt(Transport.values().length);
+            Random random = new Random();
+            int i = random.nextInt(Transport.values().length);
             t.setTransports(Transport.values()[i]);
-            t.setPrice((random.nextInt(1000))+100);
+            t.setPrice((random.nextInt(1000)) + 100);
             return tripRepository.save(trip);
         }).orElseThrow(NotFoundExceptions::new);
-
     }
 
     @Override
@@ -69,17 +82,18 @@ public class TripService implements ITripService {
     }
 
     @Override
-    public ResponseEntity<Place> addPlaceToTrip(Long userId, Long tripId, Long placeId) {
-        tripRepository.findTripByIdAndUserId(userId,tripId).map(t->t.getPlaceSet().add(placeRepository.findById(placeId).get()))
+    public Trip addPlaceToTrip(Long userId, Long tripId, Long placeId) {
+        Place place = placeRepository.findById(placeId).get();
+        return tripRepository.findTripByIdAndUserId(userId, tripId).map(t -> {
+            t.addPlace(place);
+            placeRepository.save(place);
+            return tripRepository.save(t);
+        })
                 .orElseThrow(NotFoundExceptions::new);
-        return ResponseEntity.status(HttpStatus.OK)
-                .build();
-
     }
 
     @Override
     public Optional<Trip> findTripByIdAndUserId(Long userId, Long tripId) {
-        return tripRepository.findTripByIdAndUserId(userId,tripId);
+        return tripRepository.findTripByIdAndUserId(userId, tripId);
     }
-
 }

@@ -11,15 +11,15 @@ public interface ITripService {
 
     void deleteTripById(Long id);
 
-    ResponseEntity<Place> deletePlaceFromTrip(Long userId, Long tripId, Long placeId);
+    Trip deletePlaceFromTrip(Long userId, Long tripId, Long placeId);
 
-    void addTrip(Trip trip);
+    ResponseEntity<Trip> addTrip(Long userId, Trip trip);
 
     Trip editTrip(Long userId, Long tripId, Trip trip);
 
     List<Trip> findAllByUserId(Long userId);
 
-    ResponseEntity<Place> addPlaceToTrip(Long userId, Long tripId, Long placeId);
+    Trip addPlaceToTrip(Long userId, Long tripId, Long placeId);
 
     Optional<Trip> findTripByIdAndUserId(Long userId, Long tripId);
 

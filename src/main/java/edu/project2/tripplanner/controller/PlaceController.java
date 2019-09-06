@@ -3,8 +3,6 @@ package edu.project2.tripplanner.controller;
 import edu.project2.tripplanner.model.Place;
 import edu.project2.tripplanner.service.IPlaceService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.Optional;
 @RequestMapping("/places")
 public class PlaceController {
 
-        private IPlaceService iPlaceService;
+    private IPlaceService iPlaceService;
 
     @ResponseBody
     @GetMapping

@@ -22,6 +22,7 @@ public class CommentsController {
 
         return iCommentService.findAll();
     }
+
     @ResponseBody
     @GetMapping("/user/{userId}/comments")
     public List<Comment> getAllCommentsByUserId(@PathVariable(value = "userId") Long userId) {
@@ -32,9 +33,9 @@ public class CommentsController {
     @ResponseBody
     @GetMapping("/user/{userId}/comments/{commentId}")
     public Optional<Comment> findCommentByIdAndUserId(@PathVariable(value = "userId") Long userId,
-                                                     @PathVariable(value = "commentId") Long commentId) {
+                                                      @PathVariable(value = "commentId") Long commentId) {
 
-        return iCommentService.findByIdAndUserId(commentId,userId);
+        return iCommentService.findByIdAndUserId(commentId, userId);
     }
 
 
@@ -43,7 +44,7 @@ public class CommentsController {
     public ResponseEntity<Comment> saveComment(@PathVariable(value = "userId") Long userId,
                                                @PathVariable(value = "placeId") Long placeId,
                                                @RequestBody Comment comment) {
-        iCommentService.addComment(userId,placeId,comment);
+        iCommentService.addComment(userId, placeId, comment);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
@@ -54,17 +55,17 @@ public class CommentsController {
     @DeleteMapping("/user/{userId}/place/{placeId}/comments/{commentId}")
     public void deleteComment(@PathVariable("userId") Long userId,
                               @PathVariable("placeId") Long placeId,
-                              @PathVariable("commentId") Long commentId){
-        iCommentService.deleteCommentById(userId, placeId, commentId);
+                              @PathVariable("commentId") Long commentId) {
+        iCommentService.deleteCommentById(commentId, userId, placeId);
     }
 
 
     @ResponseBody
     @PutMapping("/user/{userId}/place/{placeId}/comments/{commentId}")
     public Comment updateComment(@PathVariable(name = "userId") Long userId,
-                           @PathVariable(name = "placeId") Long placeId,
-                           @PathVariable(name = "commentId") Long commentId,
-                                                 @RequestBody Comment comment) {
-       return iCommentService.editComment(userId, placeId, commentId, comment);
+                                 @PathVariable(name = "placeId") Long placeId,
+                                 @PathVariable(name = "commentId") Long commentId,
+                                 @RequestBody Comment comment) {
+        return iCommentService.editComment(userId, placeId, commentId, comment);
     }
 }

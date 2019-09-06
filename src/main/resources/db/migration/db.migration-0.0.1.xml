@@ -6,7 +6,6 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="Maryanna">
-        <validCheckSum>8:fc61c4131c35808378af7b9999254b23</validCheckSum>
         <createTable tableName="users">
 
             <column name="id" type="bigint" autoIncrement="true">

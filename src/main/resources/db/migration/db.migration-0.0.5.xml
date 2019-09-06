@@ -1,36 +1,99 @@
 <databaseChangeLog
-xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
-    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-<changeSet id="5" author="Maryanna">
-    <validCheckSum>8:7bef79fb4fd97fc6909428d82d75b787</validCheckSum>
-    <createTable tableName="trips">
-        <column name="id" type="bigint" autoIncrement="true">
-            <constraints primaryKey="true" nullable="false" unique="true"/>
-        </column>
-        <column name="departure_day" type="date">
-            <constraints nullable="false"/>
-        </column>
-        <column name="day_of_arrival" type="date">
-            <constraints nullable="false"/>
-        </column>
+            <changeSet id="5" author="Maryanna">
+                <insert tableName="users">
+                    <column name="username">Spencer</column>
+                    <column name="email">sp23@gmail.com</column>
+                    <column name="password">23453</column>
+                </insert>
+                <insert tableName="users">
+                    <column name="username">Rachel</column>
+                    <column name="email">rachel@ukr.net</column>
+                    <column name="password">rt456</column>
+                </insert>
+                <insert tableName="users">
+                    <column name="username">Elizabeth</column>
+                    <column name="email">23eli@gmail.com</column>
+                    <column name="password">Lim1233</column>
+                </insert>
+                <insert tableName="users">
+                    <column name="username">David</column>
+                    <column name="email">d_123@gmail.com</column>
+                    <column name="password">dd123</column>
+                </insert>
+                <insert tableName="users">
+                    <column name="username">Pierce</column>
+                    <column name="email">pierce@gmail.com</column>
+                    <column name="password">09090</column>
+                </insert>
 
-        <column name="mode_of_transport" type="varchar(50)">
-            <constraints nullable="false"/>
-        </column>
+            </changeSet>
 
-        <column name="price_of_trip" type="decimal">
-            <!--                <constraints nullable="false"/>-->
-        </column>
+    <changeSet id="6" author="Maryanna">
+        <insert tableName="places">
+            <column name="country">Albania</column>
+            <column name="town">Tirane</column>
+            <column name="rate">10</column>
+            <column name="trip_id">1</column>
+        </insert>
+        <insert tableName="places">
+            <column name="country">Australia</column>
+            <column name="town">Canberra</column>
+            <column name="rate">9</column>
+            <column name="trip_id">2</column>
+        </insert>
+        <insert tableName="places">
+            <column name="country">Barbados</column>
+            <column name="town">Bridgetown</column>
+            <column name="rate">8</column>
+            <column name="trip_id">3</column>
+        </insert>
+        <insert tableName="places">
+            <column name="country">Italy</column>
+            <column name="town">Rome</column>
+            <column name="rate">7</column>
+            <column name="trip_id">4</column>
+        </insert>
+        <insert tableName="places">
+            <column name="country">Japan</column>
+            <column name="town">Tokyo</column>
+            <column name="rate">6</column>
+            <column name="trip_id">5</column>
+        </insert>
+<!--        <insert tableName="places">-->
+<!--            <column name="country">Spain</column>-->
+<!--            <column name="town">Madrid</column>-->
+<!--            <column name="rate">5</column>-->
+<!--            <column name="trip_id">1</column>-->
+<!--        </insert>-->
+<!--        <insert tableName="places">-->
+<!--            <column name="country">Egypt</column>-->
+<!--            <column name="town">Cairo</column>-->
+<!--            <column name="rate">4</column>-->
+<!--            <column name="trip_id">2</column>-->
+<!--        </insert>-->
+<!--        <insert tableName="places">-->
+<!--            <column name="country">Dominican Republic</column>-->
+<!--            <column name="town">Santa Domingo</column>-->
+<!--            <column name="rate">3</column>-->
+<!--            <column name="trip_id">6</column>-->
+<!--        </insert>-->
+<!--        <insert tableName="places">-->
+<!--            <column name="country">France</column>-->
+<!--            <column name="town">Paris</column>-->
+<!--            <column name="rate">2</column>-->
+<!--            <column name="trip_id">5</column>-->
+<!--        </insert>-->
+<!--        <insert tableName="places">-->
+<!--            <column name="country">Brazil</column>-->
+<!--            <column name="town">Brasilia</column>-->
+<!--            <column name="rate">1</column>-->
+<!--        </insert>-->
+    </changeSet>
 
-        <column name="place_id" type="bigint">
-            <constraints nullable="false" foreignKeyName="fk_trip_place" references="places(id)"/>
-        </column>
-
-    </createTable>
-</changeSet>
-
-</databaseChangeLog>
+        </databaseChangeLog>

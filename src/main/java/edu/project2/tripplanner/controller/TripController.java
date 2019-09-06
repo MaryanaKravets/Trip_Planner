@@ -1,6 +1,5 @@
 package edu.project2.tripplanner.controller;
 
-import edu.project2.tripplanner.model.Place;
 import edu.project2.tripplanner.model.Trip;
 import edu.project2.tripplanner.service.ITripService;
 import lombok.AllArgsConstructor;
@@ -26,28 +25,25 @@ public class TripController {
 
 
     @ResponseBody
-    @PostMapping("/trip")
-    public ResponseEntity<Trip> saveTrip(@RequestBody Trip trip) {
-        iTripService.addTrip(trip);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
+    @PostMapping("/user/{userId}/trip")
+    public ResponseEntity<Trip> saveTrip(@PathVariable(name = "userId") Long userId,
+                                         @RequestBody Trip trip) {
+        return iTripService.addTrip(userId, trip);
     }
 
     @ResponseBody
     @PostMapping("/user/{userId}/trip/{tripId}/place/{placeId}")
-    public ResponseEntity<Place> addPlaceToTrip(@PathVariable(name = "userId") Long userId,
-                                                @PathVariable(name = "tripId") Long tripId,
-                                                @PathVariable(name = "placeId") Long placeId){
+    public Trip addPlaceToTrip(@PathVariable(name = "userId") Long userId,
+                               @PathVariable(name = "tripId") Long tripId,
+                               @PathVariable(name = "placeId") Long placeId) {
 
-       return iTripService.addPlaceToTrip(userId, tripId, placeId);
+        return iTripService.addPlaceToTrip(userId, tripId, placeId);
     }
 
 
     @ResponseBody
     @DeleteMapping("/trip/{tripId}")
-    public ResponseEntity<Boolean> deleteTrip(@PathVariable("tripId") Long tripId)
-    {
+    public ResponseEntity<Boolean> deleteTrip(@PathVariable("tripId") Long tripId) {
         iTripService.deleteTripById(tripId);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -56,12 +52,11 @@ public class TripController {
 
     @ResponseBody
     @DeleteMapping("/user/{userId}/trip/{tripId}/place/{placeId}")
-    public ResponseEntity<Place> deletePlaceFromTrip(
+    public Trip deletePlaceFromTrip(
             @PathVariable(name = "userId") Long userId,
             @PathVariable(name = "tripId") Long tripId,
-            @PathVariable(name = "placeId") Long placeId)
-    {
-       return iTripService.deletePlaceFromTrip(userId, tripId, placeId);
+            @PathVariable(name = "placeId") Long placeId) {
+        return iTripService.deletePlaceFromTrip(userId, tripId, placeId);
     }
 
 
@@ -72,5 +67,4 @@ public class TripController {
                            @RequestBody Trip trip) {
         return iTripService.editTrip(userId, tripId, trip);
     }
-
 }

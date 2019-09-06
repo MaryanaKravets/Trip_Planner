@@ -59,7 +59,6 @@ public class UserController {
         return iUserService.findByUsername(username);
     }
 
-
     @ResponseBody
     @GetMapping("/user/exist/{username}")
     public boolean existByUsername(@PathVariable("username") String username) {
