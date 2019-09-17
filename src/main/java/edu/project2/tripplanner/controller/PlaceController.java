@@ -1,37 +1,38 @@
 package edu.project2.tripplanner.controller;
 
 import edu.project2.tripplanner.model.Place;
-import edu.project2.tripplanner.service.IPlaceService;
+import edu.project2.tripplanner.service.PlaceService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@AllArgsConstructor
-@RequestMapping("/places")
+@RequiredArgsConstructor
+@RequestMapping("/place")
 public class PlaceController {
 
-    private IPlaceService iPlaceService;
+    private final PlaceService placeService;
 
     @ResponseBody
-    @GetMapping
+    @GetMapping("/all")
     public List<Place> findAllPlaces() {
 
-        return iPlaceService.findAllPlace();
+        return placeService.findAllPlace();
     }
 
     @ResponseBody
     @GetMapping("/{id}")
     public Optional<Place> findPlaceById(@PathVariable(name = "id") Long id) {
 
-        return iPlaceService.findPlaceById(id);
+        return placeService.findPlaceById(id);
     }
 
     @ResponseBody
     @DeleteMapping("/{id}")
     public void deletePlace(@PathVariable("id") Long id) {
-        iPlaceService.deletePlaceById(id);
+        placeService.deletePlaceById(id);
     }
 }

@@ -1,68 +1,66 @@
 package edu.project2.tripplanner.controller;
 
 import edu.project2.tripplanner.model.User;
-import edu.project2.tripplanner.service.IUserService;
-import lombok.AllArgsConstructor;
+import edu.project2.tripplanner.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@AllArgsConstructor
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
-    IUserService iUserService;
+    private final UserService userService;
 
     @ResponseBody
-    @GetMapping("/user")
-    public List<User> findAllUser() {
+    @GetMapping("/all")
+    public List<User> findAllUsers() {
 
-        return iUserService.findAllUsers();
+        return userService.findAllUsers();
     }
 
 
     @ResponseBody
-    @PostMapping("/user")
+    @PostMapping
     public ResponseEntity<User> saveUser(@RequestBody User user) {
-        iUserService.saveUser(user);
+        userService.saveUser(user);
+
         return ResponseEntity
+
                 .status(HttpStatus.CREATED)
                 .build();
     }
 
-
     @ResponseBody
-    @DeleteMapping("/user/{username}")
-    public void deleteUser(@PathVariable("username") String username) {
-        iUserService.deleteByUsername(username);
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable("id") Long id) {
+        userService.deleteById(id);
     }
 
 
     @ResponseBody
-    @PatchMapping("/user")
+    @PatchMapping
     public User updateUser(@RequestBody User user) {
-        return iUserService.updateUser(user);
+
+        return userService.updateUser(user);
     }
 
-
     @ResponseBody
-    @GetMapping("/user/id/{id}")
+    @GetMapping("/id/{id}")
     public Optional<User> getUserById(@PathVariable("id") Long id) {
-        return iUserService.getUserById(id);
+
+        return userService.getUserById(id);
     }
 
     @ResponseBody
-    @GetMapping("/user/{username}")
+    @GetMapping("/{username}")
     public Optional<User> findByUsername(@PathVariable("username") String username) {
-        return iUserService.findByUsername(username);
-    }
 
-    @ResponseBody
-    @GetMapping("/user/exist/{username}")
-    public boolean existByUsername(@PathVariable("username") String username) {
-        return iUserService.existsByUsername(username);
+        return userService.findByUsername(username);
     }
 }
 

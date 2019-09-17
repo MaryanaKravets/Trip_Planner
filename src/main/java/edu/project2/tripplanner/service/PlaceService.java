@@ -1,32 +1,15 @@
 package edu.project2.tripplanner.service;
 
 import edu.project2.tripplanner.model.Place;
-import edu.project2.tripplanner.repository.PlaceRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class PlaceService implements IPlaceService {
-    private PlaceRepository placeRepository;
+public interface PlaceService {
 
-    public PlaceService(PlaceRepository placeRepository) {
-        this.placeRepository = placeRepository;
-    }
+    Optional<Place> findPlaceById(Long id);
 
-    @Override
-    public Optional<Place> findPlaceById(Long id) {
-        return placeRepository.findById(id);
-    }
+    List<Place> findAllPlace();
 
-    @Override
-    public List<Place> findAllPlace() {
-        return placeRepository.findAll();
-    }
-
-    @Override
-    public void deletePlaceById(Long id) {
-        placeRepository.deleteById(id);
-    }
+    void deletePlaceById(Long id);
 }

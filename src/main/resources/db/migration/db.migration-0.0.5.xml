@@ -65,35 +65,6 @@
             <column name="rate">6</column>
             <column name="trip_id">5</column>
         </insert>
-<!--        <insert tableName="places">-->
-<!--            <column name="country">Spain</column>-->
-<!--            <column name="town">Madrid</column>-->
-<!--            <column name="rate">5</column>-->
-<!--            <column name="trip_id">1</column>-->
-<!--        </insert>-->
-<!--        <insert tableName="places">-->
-<!--            <column name="country">Egypt</column>-->
-<!--            <column name="town">Cairo</column>-->
-<!--            <column name="rate">4</column>-->
-<!--            <column name="trip_id">2</column>-->
-<!--        </insert>-->
-<!--        <insert tableName="places">-->
-<!--            <column name="country">Dominican Republic</column>-->
-<!--            <column name="town">Santa Domingo</column>-->
-<!--            <column name="rate">3</column>-->
-<!--            <column name="trip_id">6</column>-->
-<!--        </insert>-->
-<!--        <insert tableName="places">-->
-<!--            <column name="country">France</column>-->
-<!--            <column name="town">Paris</column>-->
-<!--            <column name="rate">2</column>-->
-<!--            <column name="trip_id">5</column>-->
-<!--        </insert>-->
-<!--        <insert tableName="places">-->
-<!--            <column name="country">Brazil</column>-->
-<!--            <column name="town">Brasilia</column>-->
-<!--            <column name="rate">1</column>-->
-<!--        </insert>-->
     </changeSet>
 
         </databaseChangeLog>

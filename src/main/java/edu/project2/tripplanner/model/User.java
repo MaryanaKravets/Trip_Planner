@@ -2,6 +2,7 @@ package edu.project2.tripplanner.model;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -11,6 +12,7 @@ import java.util.*;
 @Entity
 @Data
 @Table(name = "users")
+@NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements Serializable {
 
@@ -43,8 +45,5 @@ public class User implements Serializable {
         this.username = username;
         this.email = email;
         this.password = password;
-    }
-
-    public User() {
     }
 }
