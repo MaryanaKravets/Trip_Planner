@@ -46,7 +46,6 @@ public class TripController {
         tripService.deleteTripById(tripId);
 
         return ResponseEntity
-
                 .status(HttpStatus.OK)
                 .build();
     }

@@ -2,6 +2,7 @@ package edu.project2.tripplanner.service;
 
 import edu.project2.tripplanner.dto.CommentDTO;
 import edu.project2.tripplanner.dto.CommentIdDTO;
+import edu.project2.tripplanner.exception.Message;
 import edu.project2.tripplanner.exception.NotFoundException;
 import edu.project2.tripplanner.model.Comment;
 import edu.project2.tripplanner.repository.CommentRepository;
@@ -16,10 +17,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CommentServiceImpl implements CommentService {
+public class CommentServiceImpl implements CommentService, Message {
     private final CommentRepository commentRepository;
     private final  UserRepository userRepository;
     private final PlaceRepository placeRepository;
+
+    private Long userId;
+    private Long placeId;
 
     @Override
     public List<Comment> findByUserId(Long userId) {
@@ -41,39 +45,39 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteCommentById(CommentIdDTO commentIdDTO) {
-         commentRepository.findByIdAndUserIdAndPlaceId(commentIdDTO.getCommentId(), commentIdDTO.getUserId(), commentIdDTO.getPlaceId()).map(c -> {
-            commentRepository.deleteById(commentIdDTO.getCommentId());
+         userId=commentIdDTO.getUserId();
+        Long commentId=commentIdDTO.getCommentId();
+         placeId=commentIdDTO.getPlaceId();
+         commentRepository.findByIdAndUserIdAndPlaceId(commentId, userId, placeId).map(c -> {
+            commentRepository.deleteById(commentId);
 
             return ResponseEntity.ok().build();
-        })
-                .orElseThrow(()->new NotFoundException(String
-                        .format("Comment with id '%s' not found, or user with id '%s' not found, or place with id '%s' not found"
-                                ,commentIdDTO.getCommentId(),commentIdDTO.getUserId(),commentIdDTO.getPlaceId())));
+        })                .orElseThrow(()->new NotFoundException(String.format(mes2,commentId,userId,placeId)));
     }
 
     @Override
     public void addComment(CommentDTO commentDTO){
-        userRepository.findById(commentDTO.getUserId()).map(u -> {
+         userId=commentDTO.getUserId();
+        userRepository.findById(userId).map(u -> {
             commentDTO.getComment().setUser(u);
 
             return commentRepository.save(commentDTO.getComment());
         })
-                .orElseThrow(()->new NotFoundException(String.format("User with id '%s' not found",commentDTO.getUserId())));
-        commentRepository.save(commentDTO.getComment());
+                .orElseThrow(()->new NotFoundException(String.format(mes1,userId)));
     }
 
     @Override
     public Comment editComment(CommentDTO commentDTO, Long commentId) {
-        if (!userRepository.existsById(commentDTO.getUserId()) | !placeRepository.existsById(commentDTO.getPlaceId())) {
+         userId=commentDTO.getUserId();
+         placeId=commentDTO.getPlaceId();
+        if (!userRepository.existsById(userId) || !placeRepository.existsById(placeId)) {
             throw new NotFoundException(String
-                    .format("User with id '%s' not found, or place with id '%s' not found",commentDTO.getUserId(),commentDTO.getPlaceId()));
+                    .format(mes3,userId,placeId));
         }
-        return commentRepository.findByIdAndUserIdAndPlaceId(commentId, commentDTO.getUserId(), commentDTO.getPlaceId()).map(c -> {
+        return commentRepository.findByIdAndUserIdAndPlaceId(commentId,userId, placeId).map(c -> {
             c.setTextOfComment(commentDTO.getComment().getTextOfComment());
             return commentRepository.save(commentDTO.getComment());
-        }).orElseThrow(()->new NotFoundException(String
-                .format("Comment with id '%s' not found, or user with id '%s' not found, or place with id '%s' not found"
-                        ,commentId,commentDTO.getUserId(),commentDTO.getPlaceId())));
+        }).orElseThrow(()->new NotFoundException(String.format(mes2,commentId,userId,placeId)));
     }
 
     @Override

@@ -2,6 +2,7 @@ package edu.project2.tripplanner.service;
 
 import edu.project2.tripplanner.dto.TripDTO;
 import edu.project2.tripplanner.dto.TripIdDTO;
+import edu.project2.tripplanner.exception.Message;
 import edu.project2.tripplanner.exception.NotFoundException;
 import edu.project2.tripplanner.model.Place;
 import edu.project2.tripplanner.model.Transport;
@@ -20,11 +21,15 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class TripServiceImpl implements TripService {
+public class TripServiceImpl implements TripService, Message {
 
     private final TripRepository tripRepository;
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
+
+    private Long userId;
+    private Long placeId;
+    private Long tripId;
 
     @Override
     public void deleteTripById(Long id) {
@@ -33,16 +38,18 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public Trip deletePlaceFromTrip(TripIdDTO tripIdDTO) {
-        Place place = placeRepository.findById(tripIdDTO.getPlaceId())
-                .orElseThrow(()->new NotFoundException(String.format("Place with id '%s' not found",tripIdDTO.getPlaceId())));
-        return tripRepository.findTripByIdAndUserId(tripIdDTO.getUserId(), tripIdDTO.getTripId())
+         userId=tripIdDTO.getUserId();
+         placeId=tripIdDTO.getPlaceId();
+         tripId=tripIdDTO.getTripId();
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(()->new NotFoundException(String.format(mes4, placeId)));
+        return tripRepository.findTripByIdAndUserId(userId, tripId)
                 .map(t -> {
                     t.removePlace(place);
                     placeRepository.save(place);
                     return tripRepository.save(t);
                 })
-                .orElseThrow(()->new NotFoundException(String
-                        .format("Trip with id '%s' not found, or user with id '%s' not found",tripIdDTO.getTripId(),tripIdDTO.getUserId())));
+                .orElseThrow(()->new NotFoundException(String.format(mes5, tripId,userId)));
     }
 
     @Override
@@ -55,20 +62,21 @@ public class TripServiceImpl implements TripService {
         });
 
         return ResponseEntity
-
                 .status(HttpStatus.OK)
                 .build();
     }
 
     @Override
     public Trip editTrip(TripDTO tripDTO) {
-        if (!userRepository.existsById(tripDTO.getUserId()) | !tripRepository.existsById(tripDTO.getTripId())) {
+         userId=tripDTO.getUserId();
+         tripId=tripDTO.getTripId();
+        if (!userRepository.existsById(userId) || !tripRepository.existsById(tripId)) {
             throw new NotFoundException(String
-                    .format("Trip with id '%s' not found, or user with id '%s' not found",tripDTO.getTripId(),tripDTO.getUserId()));
+                    .format(mes5,tripId,userId));
         }
-        return tripRepository.findTripByIdAndUserId(tripDTO.getUserId(), tripDTO.getTripId())
-                .map(t -> tripRepository.save(createTrip(t))).orElseThrow(()->new NotFoundException(String
-                .format("Trip with id '%s' not found, or user with id '%s' not found",tripDTO.getTripId(),tripDTO.getUserId())));
+        return tripRepository.findTripByIdAndUserId(userId, tripId)
+                .map(t -> tripRepository.save(createTrip(t)))
+                .orElseThrow(()->new NotFoundException(String.format(mes5,tripId,userId)));
     }
 
     @Override
@@ -79,16 +87,18 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public Trip addPlaceToTrip(TripIdDTO tripIdDTO) {
-        Place place = placeRepository.findById(tripIdDTO.getPlaceId())
-                .orElseThrow(()->new NotFoundException(String.format("Place with id '%s' not found",tripIdDTO.getPlaceId())));
-        return tripRepository.findTripByIdAndUserId(tripIdDTO.getUserId(), tripIdDTO.getTripId()).map(t -> {
+         userId=tripIdDTO.getUserId();
+         placeId=tripIdDTO.getPlaceId();
+         tripId=tripIdDTO.getTripId();
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(()->new NotFoundException(String.format(mes4,placeId)));
+        return tripRepository.findTripByIdAndUserId(userId, tripId).map(t -> {
             t.addPlace(place);
             placeRepository.save(place);
 
             return tripRepository.save(t);
         })
-                .orElseThrow(()->new NotFoundException(String
-                        .format("Trip with id '%s' not found, or user with id '%s' not found",tripIdDTO.getTripId(),tripIdDTO.getUserId())));
+                .orElseThrow(()->new NotFoundException(String.format(mes5, tripId,userId)));
     }
 
     @Override
@@ -97,7 +107,7 @@ public class TripServiceImpl implements TripService {
         return tripRepository.findTripByIdAndUserId(userId, tripId);
     }
 
-    public Trip createTrip(Trip trip){
+    private Trip createTrip(Trip trip){
         Trip trip1=new Trip();
         trip1.setDepartureDay(trip.getDepartureDay());
         trip1.setDayOfArrival(trip.getDayOfArrival());

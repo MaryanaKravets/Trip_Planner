@@ -47,7 +47,6 @@ public class CommentController {
         commentService.addComment(commentDTO);
 
         return ResponseEntity
-
                 .status(HttpStatus.CREATED)
                 .build();
     }
