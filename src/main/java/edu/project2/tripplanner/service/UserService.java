@@ -14,8 +14,6 @@ public interface UserService {
 
     List<User> findAllUsers();
 
-    Optional<User> getUserById(Long id);
-
     Optional<User> findByUsername(String username);
 
     boolean existsByUsername(String username);
@@ -23,4 +21,7 @@ public interface UserService {
     @Transactional
     void deleteById(Long id);
 
+    User findById(Long id);
+
+    boolean existsById(Long id);
 }

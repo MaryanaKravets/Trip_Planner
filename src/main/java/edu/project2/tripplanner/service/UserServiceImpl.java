@@ -1,5 +1,7 @@
 package edu.project2.tripplanner.service;
 
+import edu.project2.tripplanner.exception.Message;
+import edu.project2.tripplanner.exception.NotFoundException;
 import edu.project2.tripplanner.model.User;
 import edu.project2.tripplanner.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +11,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, Message {
 
     private final UserRepository userRepository;
 
@@ -32,12 +34,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-
-        return userRepository.findById(id).isPresent() ? userRepository.findById(id) : Optional.empty();
-    }
-
-    @Override
     public Optional<User> findByUsername(String username) {
 
         return userRepository.findByUsername(username).isPresent() ? userRepository.findByUsername(username) : Optional.empty();
@@ -54,4 +50,15 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public User findById(Long id) {
+
+        return userRepository.findById(id).orElseThrow(()->new NotFoundException(String.format(USER_N_F,id)));
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+
+        return userRepository.existsById(id);
+    }
 }

@@ -5,9 +5,8 @@ import edu.project2.tripplanner.dto.CommentIdDTO;
 import edu.project2.tripplanner.exception.Message;
 import edu.project2.tripplanner.exception.NotFoundException;
 import edu.project2.tripplanner.model.Comment;
+import edu.project2.tripplanner.model.User;
 import edu.project2.tripplanner.repository.CommentRepository;
-import edu.project2.tripplanner.repository.PlaceRepository;
-import edu.project2.tripplanner.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,11 +18,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService, Message {
     private final CommentRepository commentRepository;
-    private final  UserRepository userRepository;
-    private final PlaceRepository placeRepository;
-
-    private Long userId;
-    private Long placeId;
+    private final  UserServiceImpl userService;
+    private final PlaceServiceImpl placeService;
 
     @Override
     public List<Comment> findByUserId(Long userId) {
@@ -32,9 +28,10 @@ public class CommentServiceImpl implements CommentService, Message {
     }
 
     @Override
-    public Optional<Comment> findByIdAndUserId(Long id, Long userId) {
+    public Comment findByIdAndUserId(Long id, Long userId) {
 
-        return commentRepository.findByIdAndUserId(id, userId);
+        return commentRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(()->new NotFoundException(String.format(COMMENT_USER_N_F,id,userId)));
     }
 
     @Override
@@ -44,40 +41,30 @@ public class CommentServiceImpl implements CommentService, Message {
     }
 
     @Override
-    public void deleteCommentById(CommentIdDTO commentIdDTO) {
-         userId=commentIdDTO.getUserId();
-        Long commentId=commentIdDTO.getCommentId();
-         placeId=commentIdDTO.getPlaceId();
-         commentRepository.findByIdAndUserIdAndPlaceId(commentId, userId, placeId).map(c -> {
+    public void deleteCommentById(Long commentId) {
             commentRepository.deleteById(commentId);
-
-            return ResponseEntity.ok().build();
-        })                .orElseThrow(()->new NotFoundException(String.format(mes2,commentId,userId,placeId)));
     }
 
     @Override
     public void addComment(CommentDTO commentDTO){
-         userId=commentDTO.getUserId();
-        userRepository.findById(userId).map(u -> {
-            commentDTO.getComment().setUser(u);
-
-            return commentRepository.save(commentDTO.getComment());
-        })
-                .orElseThrow(()->new NotFoundException(String.format(mes1,userId)));
+        Long userId=commentDTO.getUserId();
+        User user=userService.findById(userId);
+            commentDTO.getComment().setUser(user);
+            commentRepository.save(commentDTO.getComment());
     }
 
     @Override
     public Comment editComment(CommentDTO commentDTO, Long commentId) {
-         userId=commentDTO.getUserId();
-         placeId=commentDTO.getPlaceId();
-        if (!userRepository.existsById(userId) || !placeRepository.existsById(placeId)) {
+        Long userId=commentDTO.getUserId();
+        Long placeId=commentDTO.getPlaceId();
+        if (!userService.existsById(userId) || !placeService.existsById(placeId)) {
             throw new NotFoundException(String
-                    .format(mes3,userId,placeId));
+                    .format(USER_PLACE_N_F,userId,placeId));
         }
         return commentRepository.findByIdAndUserIdAndPlaceId(commentId,userId, placeId).map(c -> {
             c.setTextOfComment(commentDTO.getComment().getTextOfComment());
             return commentRepository.save(commentDTO.getComment());
-        }).orElseThrow(()->new NotFoundException(String.format(mes2,commentId,userId,placeId)));
+        }).orElseThrow(()->new NotFoundException(String.format(COMMENT_USER_PLACE_N_F,commentId,userId,placeId)));
     }
 
     @Override

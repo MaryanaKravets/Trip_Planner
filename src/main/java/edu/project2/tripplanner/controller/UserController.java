@@ -51,9 +51,9 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable("id") Long id) {
+    public User findUserById(@PathVariable("id") Long id) {
 
-        return userService.getUserById(id);
+        return userService.findById(id);
     }
 
     @ResponseBody

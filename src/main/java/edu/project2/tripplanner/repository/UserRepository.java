@@ -17,4 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     void deleteById(Long id);
+
+    Optional<User> findById(Long id);
+
+    boolean existsById(Long id);
 }

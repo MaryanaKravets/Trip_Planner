@@ -15,7 +15,7 @@ public interface TripService {
 
     Trip deletePlaceFromTrip(TripIdDTO tripIdDTO);
 
-    ResponseEntity<Trip> addTrip(Long userId, Trip trip);
+    Trip addTrip(Long userId, Trip trip);
 
     Trip editTrip(TripDTO tripDTO);
 

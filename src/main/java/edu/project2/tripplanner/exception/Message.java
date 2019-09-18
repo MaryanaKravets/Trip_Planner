@@ -2,13 +2,15 @@ package edu.project2.tripplanner.exception;
 
 public interface Message {
 
-     String mes1="User with id '%s' not found";
+     String USER_N_F="User with id '%s' not found";
 
-     String mes2="Comment with id '%s' not found, or user with id '%s' not found, or place with id '%s' not found";
+     String COMMENT_USER_PLACE_N_F="Comment with id '%s' not found, or user with id '%s' not found, or place with id '%s' not found";
 
-     String mes3="User with id '%s' not found, or place with id '%s' not found";
+     String USER_PLACE_N_F="User with id '%s' not found, or place with id '%s' not found";
 
-     String mes4="Place with id '%s' not found";
+     String PLACE_N_F="Place with id '%s' not found";
 
-     String mes5="Trip with id '%s' not found, or user with id '%s' not found";
+     String TRIP_USER_N_F="Trip with id '%s' not found, or user with id '%s' not found";
+
+     String COMMENT_USER_N_F="Comment with id '%s' not found, or user with id '%s' not found";
 }

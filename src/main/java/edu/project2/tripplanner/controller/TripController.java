@@ -30,7 +30,11 @@ public class TripController {
     @PostMapping("/{userId}")
     public ResponseEntity<Trip> saveTrip(@PathVariable(name = "userId") Long userId,
                                          @RequestBody Trip trip) {
-        return tripService.addTrip(userId, trip);
+         tripService.addTrip(userId, trip);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ResponseBody
@@ -42,11 +46,11 @@ public class TripController {
 
     @ResponseBody
     @DeleteMapping("/{tripId}")
-    public ResponseEntity<Boolean> deleteTrip(@PathVariable("tripId") Long tripId) {
+    public ResponseEntity<?> deleteTrip(@PathVariable("tripId") Long tripId) {
         tripService.deleteTripById(tripId);
 
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .noContent()
                 .build();
     }
 

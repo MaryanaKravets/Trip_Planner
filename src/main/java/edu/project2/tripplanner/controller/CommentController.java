@@ -1,7 +1,6 @@
 package edu.project2.tripplanner.controller;
 
 import edu.project2.tripplanner.dto.CommentDTO;
-import edu.project2.tripplanner.dto.CommentIdDTO;
 import edu.project2.tripplanner.model.Comment;
 import edu.project2.tripplanner.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +33,7 @@ public class CommentController {
 
     @ResponseBody
     @GetMapping("/{commentId}/{userId}")
-    public Optional<Comment> findCommentByIdAndUserId(@PathVariable(value = "userId") Long userId,
+    public Comment findCommentByIdAndUserId(@PathVariable(value = "userId") Long userId,
                                                       @PathVariable(value = "commentId") Long commentId) {
 
         return commentService.findByIdAndUserId(commentId, userId);
@@ -52,10 +50,11 @@ public class CommentController {
     }
 
     @ResponseBody
-    @DeleteMapping
-    public void deleteComment(@RequestBody CommentIdDTO commentIdDTO){
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable(name = "commentId") Long commentId){
+        commentService.deleteCommentById(commentId);
 
-        commentService.deleteCommentById(commentIdDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @ResponseBody
