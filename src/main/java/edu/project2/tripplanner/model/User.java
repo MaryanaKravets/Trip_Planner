@@ -31,7 +31,6 @@ public class User implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     List<Trip> tripList = new ArrayList<>();
@@ -39,7 +38,6 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     List<Comment> commentList = new ArrayList<>();
-
 
     public User(String username, @Email String email, String password) {
         this.username = username;

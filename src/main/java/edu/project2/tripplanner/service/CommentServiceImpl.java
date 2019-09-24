@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService, Message {
     private final CommentRepository commentRepository;
-    private final  UserServiceImpl userService;
+    private final UserServiceImpl userService;
     private final PlaceServiceImpl placeService;
 
     @Override
@@ -28,10 +28,10 @@ public class CommentServiceImpl implements CommentService, Message {
     }
 
     @Override
-    public Comment findByIdAndUserId(Long id, Long userId) {
+    public Comment getByIdAndUserId(Long id, Long userId) {
 
-        return commentRepository.findByIdAndUserId(id, userId)
-                .orElseThrow(()->new NotFoundException(String.format(COMMENT_USER_N_F,id,userId)));
+        return commentRepository.getByIdAndUserId(id, userId)
+                .orElseThrow(() -> new NotFoundException(String.format(COMMENT_USER_NOT_FOUND_EXCEPTION_MESSAGE, id, userId)));
     }
 
     @Override
@@ -42,29 +42,29 @@ public class CommentServiceImpl implements CommentService, Message {
 
     @Override
     public void deleteCommentById(Long commentId) {
-            commentRepository.deleteById(commentId);
+        commentRepository.deleteById(commentId);
     }
 
     @Override
-    public void addComment(CommentDTO commentDTO){
-        Long userId=commentDTO.getUserId();
-        User user=userService.findById(userId);
-            commentDTO.getComment().setUser(user);
-            commentRepository.save(commentDTO.getComment());
+    public void addComment(CommentDTO commentDTO) {
+        Long userId = commentDTO.getUserId();
+        User user = userService.getById(userId);
+        commentDTO.getComment().setUser(user);
+        commentRepository.save(commentDTO.getComment());
     }
 
     @Override
     public Comment editComment(CommentDTO commentDTO, Long commentId) {
-        Long userId=commentDTO.getUserId();
-        Long placeId=commentDTO.getPlaceId();
+        Long userId = commentDTO.getUserId();
+        Long placeId = commentDTO.getPlaceId();
         if (!userService.existsById(userId) || !placeService.existsById(placeId)) {
             throw new NotFoundException(String
-                    .format(USER_PLACE_N_F,userId,placeId));
+                    .format(USER_PLACE_NOT_FOUND_EXCEPTION_MESSAGE, userId, placeId));
         }
-        return commentRepository.findByIdAndUserIdAndPlaceId(commentId,userId, placeId).map(c -> {
+        return commentRepository.findByIdAndUserIdAndPlaceId(commentId, userId, placeId).map(c -> {
             c.setTextOfComment(commentDTO.getComment().getTextOfComment());
             return commentRepository.save(commentDTO.getComment());
-        }).orElseThrow(()->new NotFoundException(String.format(COMMENT_USER_PLACE_N_F,commentId,userId,placeId)));
+        }).orElseThrow(() -> new NotFoundException(String.format(COMMENT_USER_PLACE_NOT_FOUND_EXCEPTION_MESSAGE, commentId, userId, placeId)));
     }
 
     @Override

@@ -34,9 +34,10 @@ public class UserServiceImpl implements UserService, Message {
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public User findByUsername(String username) {
 
-        return userRepository.findByUsername(username).isPresent() ? userRepository.findByUsername(username) : Optional.empty();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(String.format(USERNAME_NOT_FOUND_EXCEPTION_MESSAGE, username)));
     }
 
     @Override
@@ -51,9 +52,10 @@ public class UserServiceImpl implements UserService, Message {
     }
 
     @Override
-    public User findById(Long id) {
+    public User getById(Long id) {
 
-        return userRepository.findById(id).orElseThrow(()->new NotFoundException(String.format(USER_N_F,id)));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_FOUND_EXCEPTION_MESSAGE, id)));
     }
 
     @Override

@@ -31,6 +31,6 @@ public class Place implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "place", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<Comment> list_of_comments = new ArrayList<>();
+    private List<Comment> listOfComments = new ArrayList<>();
 
 }

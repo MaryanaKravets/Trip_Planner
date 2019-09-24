@@ -12,7 +12,7 @@ public interface PlaceService {
 
     boolean existsById(Long id);
 
-    Place findById(Long id);
+    Place getById(Long id);
 
     void save(Place place);
 }

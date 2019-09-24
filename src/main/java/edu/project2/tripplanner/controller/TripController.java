@@ -21,7 +21,7 @@ public class TripController {
 
     @ResponseBody
     @GetMapping("/{userId}")
-    public List<Trip> findTripsByUserId(@PathVariable(value = "userId") Long userId) {
+    public List<Trip> getTripsByUserId(@PathVariable(value = "userId") Long userId) {
 
         return tripService.findAllByUserId(userId);
     }
@@ -30,7 +30,7 @@ public class TripController {
     @PostMapping("/{userId}")
     public ResponseEntity<Trip> saveTrip(@PathVariable(name = "userId") Long userId,
                                          @RequestBody Trip trip) {
-         tripService.addTrip(userId, trip);
+        tripService.addTrip(userId, trip);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -39,7 +39,7 @@ public class TripController {
 
     @ResponseBody
     @PostMapping
-    public Trip addPlaceToTrip(@RequestBody TripIdDTO tripIdDTO){
+    public Trip addPlaceToTrip(@RequestBody TripIdDTO tripIdDTO) {
 
         return tripService.addPlaceToTrip(tripIdDTO);
     }
@@ -56,7 +56,7 @@ public class TripController {
 
     @ResponseBody
     @DeleteMapping
-    public Trip deletePlaceFromTrip(@RequestBody TripIdDTO tripIdDTO){
+    public Trip deletePlaceFromTrip(@RequestBody TripIdDTO tripIdDTO) {
 
         return tripService.deletePlaceFromTrip(tripIdDTO);
     }

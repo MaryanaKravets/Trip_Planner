@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,13 +33,13 @@ public class PlaceServiceImpl implements PlaceService, Message {
     }
 
     @Override
-    public Place findById(Long id) {
+    public Place getById(Long id) {
 
-        return placeRepository.findById(id).orElseThrow(()->new NotFoundException(String.format(PLACE_N_F,id)));
+        return placeRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format(PLACE_NOT_FOUND_EXCEPTION_MESSAGE, id)));
     }
 
     @Override
-    public void save(Place place){
+    public void save(Place place) {
         placeRepository.save(place);
     }
 }

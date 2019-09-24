@@ -24,9 +24,9 @@ public class PlaceController {
 
     @ResponseBody
     @GetMapping("/{id}")
-    public Place findPlaceById(@PathVariable(name = "id") Long id) {
+    public Place getPlaceById(@PathVariable(name = "id") Long id) {
 
-        return placeService.findById(id);
+        return placeService.getById(id);
     }
 
     @ResponseBody

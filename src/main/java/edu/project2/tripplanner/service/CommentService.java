@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface CommentService {
     List<Comment> findByUserId(Long userId);
 
-    Comment findByIdAndUserId(Long id, Long userId);
+    Comment getByIdAndUserId(Long id, Long userId);
 
     Optional<Comment> findByIdAndUserIdAndPlaceId(Long id, Long userId, Long placeId);
 

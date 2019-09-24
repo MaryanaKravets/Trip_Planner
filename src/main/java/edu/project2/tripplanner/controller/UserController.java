@@ -30,7 +30,6 @@ public class UserController {
         userService.saveUser(user);
 
         return ResponseEntity
-
                 .status(HttpStatus.CREATED)
                 .build();
     }
@@ -51,14 +50,14 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/{id}")
-    public User findUserById(@PathVariable("id") Long id) {
+    public User getUserById(@PathVariable("id") Long id) {
 
-        return userService.findById(id);
+        return userService.getById(id);
     }
 
     @ResponseBody
     @GetMapping("/{username}")
-    public Optional<User> findByUsername(@PathVariable("username") String username) {
+    public User findByUsername(@PathVariable("username") String username) {
 
         return userService.findByUsername(username);
     }

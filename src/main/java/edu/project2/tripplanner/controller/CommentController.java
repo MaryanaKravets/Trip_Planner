@@ -32,16 +32,16 @@ public class CommentController {
     }
 
     @ResponseBody
-    @GetMapping("/{commentId}/{userId}")
-    public Comment findCommentByIdAndUserId(@PathVariable(value = "userId") Long userId,
-                                                      @PathVariable(value = "commentId") Long commentId) {
+    @GetMapping("/{commentId}")
+    public Comment getCommentByIdAndUserId(@PathVariable(value = "commentId") Long commentId,
+                                           @RequestParam(value = "userId") Long userId) {
 
-        return commentService.findByIdAndUserId(commentId, userId);
+        return commentService.getByIdAndUserId(commentId, userId);
     }
 
     @ResponseBody
     @PostMapping
-    public ResponseEntity<Comment> saveComment(@RequestBody CommentDTO commentDTO){
+    public ResponseEntity<Comment> saveComment(@RequestBody CommentDTO commentDTO) {
         commentService.addComment(commentDTO);
 
         return ResponseEntity
@@ -51,7 +51,7 @@ public class CommentController {
 
     @ResponseBody
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable(name = "commentId") Long commentId){
+    public ResponseEntity<?> deleteComment(@PathVariable(name = "commentId") Long commentId) {
         commentService.deleteCommentById(commentId);
 
         return ResponseEntity.noContent().build();
@@ -60,7 +60,7 @@ public class CommentController {
     @ResponseBody
     @PutMapping("/{commentId}")
     public Comment updateComment(@RequestBody CommentDTO commentDTO,
-                                 @PathVariable(name = "commentId") Long commentId){
+                                 @PathVariable(name = "commentId") Long commentId) {
 
         return commentService.editComment(commentDTO, commentId);
     }
