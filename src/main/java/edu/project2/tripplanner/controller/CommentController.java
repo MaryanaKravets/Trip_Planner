@@ -25,13 +25,6 @@ public class CommentController {
     }
 
     @ResponseBody
-    @GetMapping("/{userId}")
-    public List<Comment> getAllCommentsByUserId(@PathVariable(value = "userId") Long userId) {
-
-        return commentService.findByUserId(userId);
-    }
-
-    @ResponseBody
     @GetMapping("/{commentId}")
     public Comment getCommentByIdAndUserId(@PathVariable(value = "commentId") Long commentId,
                                            @RequestParam(value = "userId") Long userId) {

@@ -1,14 +1,13 @@
 package edu.project2.tripplanner.service;
 
 import edu.project2.tripplanner.dto.CommentDTO;
-import edu.project2.tripplanner.dto.CommentIdDTO;
 import edu.project2.tripplanner.exception.Message;
 import edu.project2.tripplanner.exception.NotFoundException;
 import edu.project2.tripplanner.model.Comment;
+import edu.project2.tripplanner.model.Place;
 import edu.project2.tripplanner.model.User;
 import edu.project2.tripplanner.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,24 +46,26 @@ public class CommentServiceImpl implements CommentService, Message {
 
     @Override
     public void addComment(CommentDTO commentDTO) {
-        Long userId = commentDTO.getUserId();
-        User user = userService.getById(userId);
-        commentDTO.getComment().setUser(user);
-        commentRepository.save(commentDTO.getComment());
+        Comment comment = new Comment();
+        User user = userService.getById(commentDTO.getUserId());
+        Place place=placeService.getById(commentDTO.getPlaceId());
+
+        comment.setTextOfComment(commentDTO.getTextOfComment());
+        comment.setUser(user);
+        comment.setPlace(place);
+        commentRepository.save(comment);
     }
 
     @Override
     public Comment editComment(CommentDTO commentDTO, Long commentId) {
         Long userId = commentDTO.getUserId();
         Long placeId = commentDTO.getPlaceId();
-        if (!userService.existsById(userId) || !placeService.existsById(placeId)) {
-            throw new NotFoundException(String
-                    .format(USER_PLACE_NOT_FOUND_EXCEPTION_MESSAGE, userId, placeId));
-        }
-        return commentRepository.findByIdAndUserIdAndPlaceId(commentId, userId, placeId).map(c -> {
-            c.setTextOfComment(commentDTO.getComment().getTextOfComment());
-            return commentRepository.save(commentDTO.getComment());
-        }).orElseThrow(() -> new NotFoundException(String.format(COMMENT_USER_PLACE_NOT_FOUND_EXCEPTION_MESSAGE, commentId, userId, placeId)));
+
+        Comment comment = commentRepository.findByIdAndUserIdAndPlaceId(commentId, userId, placeId)
+                .orElseThrow(() -> new NotFoundException(String.format(COMMENT_USER_PLACE_NOT_FOUND_EXCEPTION_MESSAGE, commentId, userId, placeId)));
+
+        comment.setTextOfComment(commentDTO.getTextOfComment());
+        return commentRepository.save(comment);
     }
 
     @Override

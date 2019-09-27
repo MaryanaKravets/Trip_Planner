@@ -35,7 +35,8 @@ public class PlaceServiceImpl implements PlaceService, Message {
     @Override
     public Place getById(Long id) {
 
-        return placeRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format(PLACE_NOT_FOUND_EXCEPTION_MESSAGE, id)));
+        return placeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format(PLACE_NOT_FOUND_EXCEPTION_MESSAGE, id)));
     }
 
     @Override

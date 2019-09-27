@@ -34,15 +34,13 @@ public class TripServiceImpl implements TripService, Message {
         Long userId = tripIdDTO.getUserId();
         Long placeId = tripIdDTO.getPlaceId();
         Long tripId = tripIdDTO.getTripId();
-        Place place = placeService.getById(placeId);
 
-        return tripRepository.findTripByIdAndUserId(userId, tripId)
-                .map(t -> {
-                    t.removePlace(place);
-                    placeService.save(place);
-                    return tripRepository.save(t);
-                })
+        Place place = getPlace(placeId);
+        Trip trip = tripRepository.findTripByIdAndUserId(userId, tripId)
                 .orElseThrow(() -> new NotFoundException(String.format(TRIP_USER_NOT_FOUND_EXCEPTION_MESSAGE, tripId, userId)));
+        trip.removePlace(place);
+
+        return tripRepository.save(trip);
     }
 
     @Override
@@ -59,13 +57,12 @@ public class TripServiceImpl implements TripService, Message {
     public Trip editTrip(TripDTO tripDTO) {
         Long userId = tripDTO.getUserId();
         Long tripId = tripDTO.getTripId();
-        if (!userService.existsById(userId) || !tripRepository.existsById(tripId)) {
-            throw new NotFoundException(String
-                    .format(TRIP_USER_NOT_FOUND_EXCEPTION_MESSAGE, tripId, userId));
-        }
-        return tripRepository.findTripByIdAndUserId(userId, tripId)
-                .map(t -> tripRepository.save(createTrip(t)))
+
+        Trip trip = tripRepository.findTripByIdAndUserId(userId, tripId)
                 .orElseThrow(() -> new NotFoundException(String.format(TRIP_USER_NOT_FOUND_EXCEPTION_MESSAGE, tripId, userId)));
+
+        return tripRepository.save(createTrip(trip));
+
     }
 
     @Override
@@ -79,14 +76,13 @@ public class TripServiceImpl implements TripService, Message {
         Long userId = tripIdDTO.getUserId();
         Long placeId = tripIdDTO.getPlaceId();
         Long tripId = tripIdDTO.getTripId();
-        Place place = placeService.getById(placeId);
-        return tripRepository.findTripByIdAndUserId(userId, tripId).map(t -> {
-            t.addPlace(place);
-            placeService.save(place);
 
-            return tripRepository.save(t);
-        })
+        Place place = getPlace(placeId);
+        Trip trip = tripRepository.findTripByIdAndUserId(userId, tripId)
                 .orElseThrow(() -> new NotFoundException(String.format(TRIP_USER_NOT_FOUND_EXCEPTION_MESSAGE, tripId, userId)));
+        trip.addPlace(place);
+
+        return tripRepository.save(trip);
     }
 
     @Override
@@ -104,5 +100,10 @@ public class TripServiceImpl implements TripService, Message {
         trip1.setTransports(Transport.values()[i]);
         trip1.setPrice((random.nextInt(1000)) + 100);
         return trip1;
+    }
+
+    private Place getPlace(Long placeId){
+
+        return placeService.getById(placeId);
     }
 }
